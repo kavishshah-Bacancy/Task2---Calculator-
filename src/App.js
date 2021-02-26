@@ -1,3 +1,4 @@
+/* eslint-disable no-eval */
 import React, { useState } from "react";
 import classes from "./App.module.css";
 import Layout from "./Components/Layout/Layout";
@@ -50,12 +51,15 @@ function App() {
   };
 
   const findPower = (btnIndetifier) => {
-    setNo1(parseInt(result));
-    setResult(result + btnIndetifier);
-    setFlag(true);
+    try {
+      setNo1(parseInt(result));
+      setResult(result + btnIndetifier);
+      setFlag(true);
+    } catch (error) {
+      setResult("Syntax error");
+    }
   };
   const onClickHandler = (btnIndetifier) => {
-    console.log(btnIndetifier);
     if (btnIndetifier === "=") calculate();
     else if (btnIndetifier === "CE") backspace();
     else if (btnIndetifier === "C") clearInput();
