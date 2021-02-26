@@ -1,23 +1,76 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import classes from "./App.module.css";
+import Layout from "./Components/Layout/Layout";
 
 function App() {
+  const [result, setResult] = useState("");
+  const [no1, setNo1] = useState(0);
+  const [flag, setFlag] = useState(false);
+  const backspace = () => {
+    setResult(result.toString().slice(0, -1));
+  };
+  const clearInput = () => {
+    setResult("");
+  };
+
+  const calculate = () => {
+    let calculatedAns = "";
+    try {
+      if (flag) {
+        let val = result;
+        let index = val.indexOf("^");
+        val = val.substr(index + 1, val.length);
+        setResult((no1 ** val).toString());
+      } else {
+        calculatedAns = eval(result);
+        setResult(calculatedAns.toString());
+      }
+    } catch (error) {
+      setResult("Syntax error");
+    }
+  };
+
+  const findSquare = () => {
+    try {
+      let currentValue = eval(result);
+      let squareValue = currentValue * currentValue;
+      setResult(squareValue);
+    } catch (error) {
+      setResult("Syntax error");
+    }
+  };
+
+  const findSquareRoot = () => {
+    try {
+      let sqrtValue = Math.sqrt(result);
+      setResult(sqrtValue);
+    } catch (error) {
+      setResult("Syntax error");
+    }
+  };
+
+  const findPower = (btnIndetifier) => {
+    setNo1(parseInt(result));
+    setResult(result + btnIndetifier);
+    setFlag(true);
+  };
+  const onClickHandler = (btnIndetifier) => {
+    console.log(btnIndetifier);
+    if (btnIndetifier === "=") calculate();
+    else if (btnIndetifier === "CE") backspace();
+    else if (btnIndetifier === "C") clearInput();
+    else if (btnIndetifier === "Square") findSquare();
+    else if (btnIndetifier === "Sqrt") findSquareRoot();
+    else if (btnIndetifier === "^") findPower(btnIndetifier);
+    else setResult(result + btnIndetifier);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.App}>
+      <div className={classes.result}>
+        <p>{result}</p>
+      </div>
+      <Layout clicked={onClickHandler} />
     </div>
   );
 }
